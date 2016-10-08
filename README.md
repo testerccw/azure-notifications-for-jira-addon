@@ -67,6 +67,29 @@ addOn_serverUrl: https://$AZURE_WEBAPP_NAME$.azurewebsites.net
 
 This will result in the JIRA add-on running in Azure on a Web App.
 
+If you are having issues with starting up the add-on, you can always enable tracing to debug. Set the `DEBUG` environment variable (App Setting) either to `*` for all tracing, or a list (comma separated) of one or more of the following:
+
+```
+azure-notifications-addon:application:setup
+azure-notifications-addon:config
+azure-notifications-addon:host-request
+azure-notifications-addon:jira:azure-autoscale-event
+azure-notifications-addon:jira:azure-default
+azure-notifications-addon:jira:azure-metric-alert
+azure-notifications-addon:jira:issue-payload-builder
+azure-notifications-addon:middleware:validate-admintoken
+azure-notifications-addon:middleware:validate-installation
+azure-notifications-addon:middleware:validate-sendtoken
+azure-notifications-addon:routes
+azure-notifications-addon:routes:addon-descriptor
+azure-notifications-addon:routes:addon-lifecycle
+azure-notifications-addon:routes:jira-notifications
+azure-notifications-addon:secure-store
+azure-notifications-addon:server
+```
+
+You will be able to view the output of this trace in the Azure Portal under the **Monitoring > Log stream** section of your Web App. 
+
 # Install add-on in JIRA
 
 Use the **Manage add-ons** functionality in the **JIRA Administration** screen to connect the add-on with your JIRA instance. 
