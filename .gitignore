@@ -1,0 +1,6 @@
+# Folders
+node_modules
+
+# Configuration
+development-config.json
+production-config.json

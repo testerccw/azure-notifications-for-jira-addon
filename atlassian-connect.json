@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.atlassian.com/static/connect/docs/latest/schema/jira-global-schema.json#",
+
+	"key": "azure-notifications-addon",
+  "name": "Azure Notifications for Atlassian",
+  "description": "Notifications from Azure will be created as Incidents in Jira Service Desk.",
+  "vendor": {
+    "name": "Atlassian/Microsoft",
+    "url": "https://www.atlassian.com"
+	},
+  "baseUrl": "{{baseUrl}}",
+  "links": {
+  	"self": "{{baseUrl}}/atlassian-addon-descriptor",
+    "homepage": "http://atlassian.com/"
+  },
+  "authentication": {
+  	"type": "jwt"
+  },
+  "lifecycle": {
+    "installed": "/add-on/installed?token={{adminToken}}",
+    "uninstalled": "/add-on/uninstalled?token={{adminToken}}"
+  },
+  "scopes": [
+  	"READ","WRITE"
+  ]
+}
+ 
