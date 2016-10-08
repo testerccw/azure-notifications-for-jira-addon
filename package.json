@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "Azure Notifications Add-On for Atlassian JIRA",
+  "engines": {
+    "node": ">=6.6.0"
+  },
   "main": "app.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./www"
   },
   "author": "Atlassian/Microsoft",
   "license": "MIT",

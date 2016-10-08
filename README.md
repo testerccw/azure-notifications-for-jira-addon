@@ -8,9 +8,15 @@ If you have resources deployed in Azure and are using JIRA, then this add-on has
 
 # Install
 
-In order to deploy and configure this JIRA add-on, you should follow these steps:
+In order to deploy and configure this JIRA add-on, you should follow one of these options:
 
-## Manual 
+## The easy way
+
+The following repo contains ARM Templates and scripts to make installing the required infrastructure really repeatable and easy.
+
+* [BitBucket - Azure Notifications for JIRA add-on Infrastructure](https://bitbucket.org/atlassian_microsoft/azure-notifications-for-jira-infrastructure)
+
+## The manual way 
 
 ### Azure AD Service principal
 
@@ -27,12 +33,12 @@ Create an Azure AD Service Principal that you will use to access the Azure Key V
 
 ### Azure Key Vault
 
-Create an Azure Key Vault using the steps in [Manage Key Vault using CLI](https://azure.microsoft.com/en-us/documentation/articles/key-vault-manage-with-cli/). The relevant steps are as follows:
+Create an Azure Key Vault using the steps in [Manage Key Vault using CLI](https://azure.microsoft.com/en-us/documentation/articles/key-vault-manage-with-cli/) and assign . The relevant steps are as follows:
 
 ```
 azure keyvault create --vault-name 'JIRAKeyVault' --resource-group '$RESOURCE_GROUP$' --location '$LOCATION$'
 
-azure keyvault set-policy --vault-name 'JIRAKeyVault' --spn $OBJECT_ID_FROM_EARLIER$ --perms-to-keys '["decrypt","sign"]'
+azure keyvault set-policy --vault-name 'JIRAKeyVault' --spn $OBJECT_ID_FROM_EARLIER$ --perms-to-keys '["all"]' --perms-to-secrets '["all"]'
 ```
 
 ### Azure Web App 
@@ -41,17 +47,11 @@ Create a Web App in Azure that will host the JIRA add-on.
 
 Clone this repo and follow instructions at [Continuous Deployment from BitBucket to Azure Web App](https://azure.microsoft.com/en-us/documentation/articles/app-service-continuous-deployment/) to link the repo to the Azure Web App. This will automatically deploy the code in the repo to your Web App.
 
-## Scripted
-
-The following repo contains ARM Templates and scripts to make installing the required infrastructure easy. You should use this instead of the manual steps above to save you time.
-
-* [BitBucket - Azure Notifications for JIRA add-on Infrastructure](https://bitbucket.org/atlassian_microsoft/azure-notifications-for-jira-infrastructure)
-
 # Configure JIRA add-on 
 
-Copy the `sample-config.json` file to a `development-config.json` and/or `production-config.json`. Replace the JIRA server url and Azure Vault uri with your values. 
+Edit the `production-config.json` to contain the appropriate collection of project keys and issue types for your JIRA instance. 
 
-The other values that are marked with `SENSITIVE, DO NOT COMMIT`, should be not be committed into source control. These can be provided as environment variables to the web app. This can be done via the App Settings for the Web App in the Azure Portal. 
+There are other configuration parameters that should not be committed into source control. These can be provided as environment variables to the web app. This is done in Azure via the App Settings for the Web App in the Azure Portal. 
 
 The following environment variables should be set:
 
@@ -61,6 +61,8 @@ addOn_adminToken: $TOKEN_FOR_JIRA_TO_MANAGE_ADDON_LIFECYCLE$
 addOn_sendToken: $TOKEN_FOR_AZURE_WEBHOOKS$
 azure_keyVault_clientId: $AZURE_AD_SP_APPLICATION_ID$
 azure_keyVault_clientSecret: $AZURE_AD_SP_PASSWORD$
+azure_keyVault_vaultUri: https://$LOWERCASE(KEYVAULT_NAME)$.vault.azure.net
+addOn_serverUrl: https://$AZURE_WEBAPP_NAME$.azurewebsites.net
 ```
 
 This will result in the JIRA add-on running in Azure on a Web App.
@@ -72,7 +74,7 @@ Use the **Manage add-ons** functionality in the **JIRA Administration** screen t
 Use the following endpoint for the add-on descriptor:
 
 ```
-http://$JIRA_SERVER_URL/atlassian-addon-descriptor?token=$ADMIN_TOKEN$
+https://$ADDON_SERVER_URL/atlassian-addon-descriptor?token=$ADMIN_TOKEN$
 ```
 
 # Configure Azure notification webhooks
@@ -82,7 +84,7 @@ Set up webhooks in Azure as per [Get Started with Azure Monitor](https://azure.m
 Use the following endpoint in your webhook:
 
 ```
-http://$JIRA_SERVER_URL$/notification/jira/$JIRA_PROJECT_KEY$/$JIRA_ISSUE_TYPE$?token=$SEND_TOKEN$
+https://$ADDON_SERVER_URL$/notification/jira/$JIRA_PROJECT_KEY$/$JIRA_ISSUE_TYPE$?token=$SEND_TOKEN$
 ```
 
 # For more information

@@ -10,8 +10,8 @@ module.exports = function(app) {
     var content = fs.readFileSync('atlassian-connect.json', 'utf8');
     
     debug('Building add-on descriptor.');
-    debug('jira:serverUrl -> ' + config.get('jira:serverUrl'));
-    content = content.replace(/{{baseUrl}}/g, config.get('jira:serverUrl'));
+    debug('addOn:serverUrl -> ' + config.get('addOn:serverUrl'));
+    content = content.replace(/{{baseUrl}}/g, config.get('addOn:serverUrl'));
     debug('addOn:adminToken -> ' + config.get('addOn:adminToken'));
     content = content.replace(/{{adminToken}}/g, config.get('addOn:adminToken'));
 
