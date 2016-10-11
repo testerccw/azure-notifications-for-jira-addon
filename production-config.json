@@ -1,0 +1,19 @@
+{
+  "addOn": {
+    "appKey": "azure-notifications-addon",
+    "appVersion": "0.1.0",
+    "jwt": {
+      "validityInMinutes": 3
+    }
+  },  
+  "jira": {
+    "projectKeys": {
+      "AN": "Azure Notifications",
+      "ISD": "IT Service Desk"
+    },
+    "issueTypes": [
+      "Incident",
+      "Problem"
+    ]
+  }
+}
