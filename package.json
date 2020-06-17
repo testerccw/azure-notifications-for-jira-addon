@@ -8,8 +8,8 @@
   },
   "main": "app.js",
   "scripts": {
-    "start": "node ./www",
-    "build": "node ./www"
+    "build": "node ./www",
+    "start": "node ./www"
   },
   "author": "Atlassian/Microsoft",
   "license": "MIT",
