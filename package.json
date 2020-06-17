@@ -8,7 +8,6 @@
   },
   "main": "app.js",
   "scripts": {
-    "build": "node ./www",
     "start": "node ./www"
   },
   "author": "Atlassian/Microsoft",
